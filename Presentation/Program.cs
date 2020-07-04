@@ -1,4 +1,7 @@
 ﻿using System.IO;
+using Application.Common.Interfaces;
+using Application.Common.Settings;
+using Application.Input;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +27,13 @@ namespace Presentation
 
             var config = LoadConfiguration();
             services.AddSingleton(config);
+
+            //Add Settings to IOC Container
+            var specialLength = config.GetSection("ApplicationConstants:SpecialTalkLength").Get<SpecialLengthSettings>();
+            services.AddSingleton(specialLength);
+
+            //Add Services To IOC Container
+            services.AddScoped<IInputStrategy, FileInput>();
 
             services.AddTransient<App>();
 
