@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Application;
+using Application.Common.Factories;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
+using Application.Input;
 using Microsoft.Extensions.Configuration;
 
 namespace Presentation
@@ -11,20 +13,30 @@ namespace Presentation
     public class App
     {
         private readonly IConfiguration _config;
-        private readonly IInputStrategy _input;
+        private readonly IInputFactory _inputFactory;
 
         public App(
             IConfiguration config,
-            IInputStrategy input)
+            IInputFactory inputFactory)
         {
             _config = config;
-            _input = input;
+            _inputFactory = inputFactory;
         }
 
         // Equivalent to Main in Program.cs
         public void Run()
         {
-            IList<Talk> talks = _input.Read();
+
+            string inputStyle;
+            do
+            {
+                Console.Write("Choose your input (\"Manual\" or \"File\"): ");
+                inputStyle = Console.ReadLine();
+            } while (inputStyle != null && (inputStyle.ToLower() != "manual" && inputStyle.ToLower() != "file"));
+
+            var inputStrategy = _inputFactory.GetInputStrategy(inputStyle);
+
+            var allTalks = inputStrategy.Read();
 
             var sessions = _config.GetSection("ApplicationConstants:Sessions").GetChildren();
 

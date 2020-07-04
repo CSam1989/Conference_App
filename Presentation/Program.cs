@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Application.Common.Factories;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Input;
@@ -33,7 +34,7 @@ namespace Presentation
             services.AddSingleton(specialLength);
 
             //Add Services To IOC Container
-            services.AddScoped<IInputStrategy, ManualInput>();
+            services.AddSingleton<IInputFactory, InputFactory>();
 
             services.AddTransient<App>();
 
