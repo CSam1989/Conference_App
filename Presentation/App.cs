@@ -38,15 +38,15 @@ namespace Presentation
 
             var allTalks = inputStrategy.Read();
 
-            var sessions = _config.GetSection("ApplicationConstants:Sessions").GetChildren();
+            //var sessions = _config.GetSection("ApplicationConstants:Sessions").GetChildren();
 
-            foreach (var session in sessions)
-            {
-                var test = session.Get<SessionSettings>();
+            //foreach (var session in sessions)
+            //{
+            //    var test = session.Get<SessionSettings>();
 
-                Console.WriteLine(test.Name);
-                Console.WriteLine(test.MaxLength);
-            }
+            //    Console.WriteLine(test.Name);
+            //    Console.WriteLine(test.MaxLength);
+            //}
 
             Console.WriteLine("Hello World!");
         }

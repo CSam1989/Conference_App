@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
+using Application.Conference.Composite;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Input
@@ -17,9 +18,9 @@ namespace Application.Input
             _specialLength = specialLength;
         }
 
-        public IList<Talk> Read()
+        public IList<ConferenceComponent> Read()
         {
-            IList<Talk> talks = new List<Talk>();
+            IList<ConferenceComponent> talks = new List<ConferenceComponent>();
 
             using var reader = new StreamReader("./Data/Talks.txt", Encoding.UTF8);
 
@@ -37,11 +38,7 @@ namespace Application.Input
                         ? _specialLength.Length 
                         : int.Parse(durationString.Substring(0, durationString.Length - 3));
 
-                    talks.Add(new Talk
-                    {
-                        Name = name,
-                        Duration = duration
-                    });
+                    talks.Add(new ConferenceLeaf(name, duration, _specialLength));
                 }
             }
 

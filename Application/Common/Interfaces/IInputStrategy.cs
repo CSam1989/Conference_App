@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Application.Conference.Composite;
 
 namespace Application.Common.Interfaces
 {
     public interface IInputStrategy
     {
-        IList<Talk> Read();
+        IList<ConferenceComponent> Read();
     }
 }
