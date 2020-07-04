@@ -21,6 +21,9 @@ namespace Application.Conference.Composite
             if (Duration == _specialLength.Length)
                 durationString = _specialLength.Name;
 
+            if (Duration == 0)
+                durationString = null;
+
             return $"{Name} {durationString}{Environment.NewLine}";
         }
     }

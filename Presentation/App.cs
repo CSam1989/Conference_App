@@ -16,22 +16,24 @@ namespace Presentation
     {
         private readonly ITrackService _trackService;
         private readonly IInputFactory _inputFactory;
+        private readonly SpecialLengthSettings _specialLength;
         private readonly Sessions _sessions;
 
         public App(
             ITrackService trackService,
             IInputFactory inputFactory,
+            SpecialLengthSettings specialLength,
             Sessions sessions)
         {
             _trackService = trackService;
             _inputFactory = inputFactory;
+            _specialLength = specialLength;
             _sessions = sessions;
         }
 
         // Equivalent to Main in Program.cs
         public void Run()
         {
-
             string inputStyle;
             do
             {
@@ -43,7 +45,7 @@ namespace Presentation
 
             var allTalks = inputStrategy.Read();
 
-            var builder = new ConferenceBuilder(allTalks, _trackService, _sessions);
+            var builder = new ConferenceBuilder(allTalks, _trackService, _specialLength,_sessions);
             var conference = builder.BuildConference();
 
             Console.WriteLine(conference.Print());

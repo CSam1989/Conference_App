@@ -11,12 +11,18 @@ namespace Application.Conference.Builder
         private readonly IList<ConferenceComponent> _allTalks;
         private readonly Sessions _sessions;
         private readonly ITrackService _trackService;
+        private readonly SpecialLengthSettings _specialLength;
 
-        public ConferenceBuilder(IList<ConferenceComponent> allTalks, ITrackService trackService, Sessions sessions) :
+        public ConferenceBuilder(
+            IList<ConferenceComponent> allTalks, 
+            ITrackService trackService,
+            SpecialLengthSettings specialLength, 
+            Sessions sessions) :
             base(allTalks)
         {
             _allTalks = allTalks;
             _trackService = trackService;
+            _specialLength = specialLength;
             _sessions = sessions;
         }
 
@@ -30,7 +36,10 @@ namespace Application.Conference.Builder
             var track = CreateComposite(name);
 
             foreach (var sessionSettings in _sessions.SessionList)
+            {
                 track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength));
+                track.Add(new ConferenceLeaf(sessionSettings.FinishingEvent, 0, _specialLength));
+            }
 
             return track;
         }
