@@ -10,11 +10,6 @@ namespace Application.Conference.Composite
 
         public abstract string Print();
 
-        public virtual bool IsComposite()
-        {
-            return true;
-        }
-
         // In leaf component => Violates ISP
         // Creates transparency (Composite & Leaf treated the same)
         public virtual void Add(ConferenceComponent component)

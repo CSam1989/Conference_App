@@ -23,10 +23,5 @@ namespace Application.Conference.Composite
 
             return $"{Name} {durationString}{Environment.NewLine}";
         }
-
-        public override bool IsComposite()
-        {
-            return false;
-        }
     }
 }
