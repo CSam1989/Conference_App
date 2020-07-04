@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Application.Conference.Composite
 {
-    public class ConferenceComposite: ConferenceComponent
+    public class ConferenceComposite : ConferenceComponent
     {
-        private readonly IList<ConferenceComponent> _conferenceComponents;
-
-        public ConferenceComposite(string name, int maxDuration)
+        public ConferenceComposite(string name = null, int maxDuration = 0)
         {
             Name = name;
             Duration = maxDuration;
-            _conferenceComponents = new List<ConferenceComponent>();
+            ConferenceComponents = new List<ConferenceComponent>();
         }
+
+        public IList<ConferenceComponent> ConferenceComponents { get; }
 
         public override void Add(ConferenceComponent component)
         {
-            _conferenceComponents.Add(component);
+            ConferenceComponents.Add(component);
         }
 
         public override string Print()
         {
-            StringBuilder builder = new StringBuilder();
-            if (Name!= null)
+            var builder = new StringBuilder();
+            if (Name != null)
                 builder.Append($"\n{Name}\n"); //newline before & after name
 
-            foreach (var component in _conferenceComponents)
-            {
-                builder.Append(component.Print());
-            }
+            foreach (var component in ConferenceComponents) builder.Append(component.Print());
 
             return builder.ToString();
         }

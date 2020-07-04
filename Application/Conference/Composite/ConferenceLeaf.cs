@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Application.Common.Settings;
 
 namespace Application.Conference.Composite
 {
-    public class ConferenceLeaf: ConferenceComponent
+    public class ConferenceLeaf : ConferenceComponent
     {
         private readonly SpecialLengthSettings _specialLength;
 
@@ -18,12 +16,12 @@ namespace Application.Conference.Composite
 
         public override string Print()
         {
-            string durationString = $"{Duration.ToString()}min";
+            var durationString = $"{Duration.ToString()}min";
 
             if (Duration == _specialLength.Length)
                 durationString = _specialLength.Name;
 
-            return $"{Name} {durationString}";
+            return $"{Name} {durationString}{Environment.NewLine}";
         }
 
         public override bool IsComposite()

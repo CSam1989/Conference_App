@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Application.Conference.Composite
+﻿namespace Application.Conference.Composite
 {
     public class ConferenceClient
     {
-        public string Print(ConferenceComponent component)
+        private readonly ConferenceComponent _component;
+
+        public ConferenceClient(ConferenceComponent component)
         {
-            return component.Print();
+            _component = component;
         }
 
-        public void AddComponent(ConferenceComponent parentComponent, ConferenceComponent childComponent)
+        public string Print()
         {
-            if(parentComponent.IsComposite())
-                parentComponent.Add(childComponent);
+            return _component.Print();
         }
     }
 }
