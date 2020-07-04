@@ -33,7 +33,7 @@ namespace Presentation
             services.AddSingleton(specialLength);
 
             //Add Services To IOC Container
-            services.AddScoped<IInputStrategy, FileInput>();
+            services.AddScoped<IInputStrategy, ManualInput>();
 
             services.AddTransient<App>();
 
