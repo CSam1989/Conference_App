@@ -25,6 +25,7 @@ namespace Application.Conference.Composite
             if (Duration == 0)
                 durationString = null;
 
+            // CultureInfo US => AM/PM
             return $"{TimeStamp.ToString("hh:mm tt", new CultureInfo("en-US"))} {Name} {durationString}{Environment.NewLine}";
         }
     }

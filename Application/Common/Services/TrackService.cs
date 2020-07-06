@@ -8,6 +8,13 @@ namespace Application.Common.Services
 {
     public class TrackService : ITrackService
     {
+        private readonly ITimeService _timeService;
+
+        public TrackService(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
+
         public IList<ConferenceComponent> CalculateTalksForSession
             (IList<ConferenceComponent> allTalks, int maximumMinutes, int startingTime)
         {
@@ -21,7 +28,9 @@ namespace Application.Common.Services
                 {
                     totalLength += talk.Duration;
 
-                    talk.TimeStamp = previousLeaf?.TimeStamp.AddMinutes(previousLeaf.Duration) ?? timestamp.AddHours(startingTime);
+                    talk.TimeStamp = previousLeaf == null 
+                        ? _timeService.CalculateStartingTimeStamp(startingTime) 
+                        : _timeService.CalculateTimeStampFromPrevious(previousLeaf.TimeStamp, previousLeaf.Duration);
 
                     sessionTalks.Add(talk);
                     previousLeaf = talk;

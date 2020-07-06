@@ -48,6 +48,7 @@ namespace Presentation
             //Add Services To IOC Container
             services.AddSingleton<IInputFactory, InputFactory>();
             services.AddScoped<ITrackService, TrackService>();
+            services.AddScoped<ITimeService, TimeService>();
 
             services.AddTransient<App>();
 
