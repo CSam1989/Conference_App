@@ -37,19 +37,19 @@ namespace Application.Conference.Builder
 
             foreach (var sessionSettings in _sessions.SessionList)
             {
-                track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength));
+                track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength, sessionSettings.StartSession));
                 track.Add(new ConferenceLeaf(sessionSettings.FinishingEvent, 0, _specialLength));
             }
 
             return track;
         }
 
-        private ConferenceComponent BuildSession(ref IList<ConferenceComponent> remainingTalks, int maxDuration)
+        private ConferenceComponent BuildSession(ref IList<ConferenceComponent> remainingTalks, int maxDuration, int startingTime)
         {
             var session = CreateComposite(null, maxDuration);
 
             var sessionTalks =
-                _trackService.CalculateTalksForSession(remainingTalks, maxDuration);
+                _trackService.CalculateTalksForSession(remainingTalks, maxDuration, startingTime);
             remainingTalks = _trackService.RemoveSelectedTalksFromInputTalks(remainingTalks, sessionTalks);
 
             foreach (var talk in sessionTalks) session.Add(talk);
