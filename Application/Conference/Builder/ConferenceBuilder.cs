@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Conference.Composite;
@@ -8,20 +9,22 @@ namespace Application.Conference.Builder
 {
     public class ConferenceBuilder : CompositeBuilder
     {
-        private readonly IList<ConferenceComponent> _allTalks;
+        private IList<ConferenceComponent> _sessionTalks;
         private readonly Sessions _sessions;
         private readonly ITrackService _trackService;
+        private readonly ITimeService _timeService;
         private readonly SpecialLengthSettings _specialLength;
 
         public ConferenceBuilder(
             IList<ConferenceComponent> allTalks, 
             ITrackService trackService,
+            ITimeService timeService,
             SpecialLengthSettings specialLength, 
             Sessions sessions) :
             base(allTalks)
         {
-            _allTalks = allTalks;
             _trackService = trackService;
+            _timeService = timeService;
             _specialLength = specialLength;
             _sessions = sessions;
         }
@@ -38,7 +41,11 @@ namespace Application.Conference.Builder
             foreach (var sessionSettings in _sessions.SessionList)
             {
                 track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength, sessionSettings.StartSession));
-                track.Add(new ConferenceLeaf(sessionSettings.FinishingEvent, 0, _specialLength));
+                var finishEvent = new ConferenceLeaf(sessionSettings.FinishingEvent, 0, _specialLength);
+                var lastTalk = _sessionTalks.Last();
+                finishEvent.TimeStamp =
+                    _timeService.CalculateTimeStampFromPrevious(lastTalk.TimeStamp, lastTalk.Duration);
+                track.Add(finishEvent);
             }
 
             return track;
@@ -48,11 +55,11 @@ namespace Application.Conference.Builder
         {
             var session = CreateComposite(null, maxDuration);
 
-            var sessionTalks =
+            _sessionTalks =
                 _trackService.CalculateTalksForSession(remainingTalks, maxDuration, startingTime);
-            remainingTalks = _trackService.RemoveSelectedTalksFromInputTalks(remainingTalks, sessionTalks);
+            remainingTalks = _trackService.RemoveSelectedTalksFromInputTalks(remainingTalks, _sessionTalks);
 
-            foreach (var talk in sessionTalks) session.Add(talk);
+            foreach (var talk in _sessionTalks) session.Add(talk);
 
             return session;
         }

@@ -15,17 +15,20 @@ namespace Presentation
     public class App
     {
         private readonly ITrackService _trackService;
+        private readonly ITimeService _timeService;
         private readonly IInputFactory _inputFactory;
         private readonly SpecialLengthSettings _specialLength;
         private readonly Sessions _sessions;
 
         public App(
             ITrackService trackService,
+            ITimeService timeService,
             IInputFactory inputFactory,
             SpecialLengthSettings specialLength,
             Sessions sessions)
         {
             _trackService = trackService;
+            _timeService = timeService;
             _inputFactory = inputFactory;
             _specialLength = specialLength;
             _sessions = sessions;
@@ -45,7 +48,7 @@ namespace Presentation
 
             var allTalks = inputStrategy.Read();
 
-            var builder = new ConferenceBuilder(allTalks, _trackService, _specialLength,_sessions);
+            var builder = new ConferenceBuilder(allTalks, _trackService,_timeService, _specialLength,_sessions);
             var conference = builder.BuildConference();
 
             Console.WriteLine(conference.Print());

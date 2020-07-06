@@ -21,7 +21,6 @@ namespace Application.Common.Services
             var totalLength = 0;
             var sessionTalks = new List<ConferenceComponent>();
             ConferenceComponent previousLeaf = null;
-            var timestamp = DateTime.Today; //No added time
 
             foreach (var talk in allTalks)
                 if (totalLength + talk.Duration <= maximumMinutes)
