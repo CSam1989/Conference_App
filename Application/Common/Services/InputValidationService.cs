@@ -20,12 +20,12 @@ namespace Application.Common.Services
 
         public bool IsValidTalkTitle(string name)
         {
-            return name != null && !name.Any(char.IsDigit);
+            return !string.IsNullOrWhiteSpace(name) && !name.Any(char.IsDigit);
         }
 
         public bool IsValidTalkDuration(string duration, out int output)
         {
-            if (duration.ToLower() == _specialLength.Name.ToLower())
+            if (string.Equals(duration, _specialLength.Name, StringComparison.CurrentCultureIgnoreCase))
             {
                 output = _specialLength.Length;
                 return true;
