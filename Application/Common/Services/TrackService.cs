@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Conference.Composite;
@@ -27,15 +28,34 @@ namespace Application.Common.Services
                 {
                     totalLength += talk.Duration;
 
-                    talk.TimeStamp = previousLeaf == null 
-                        ? _timeService.CalculateStartingTimeStamp(startingTime) 
-                        : _timeService.CalculateTimeStampFromPrevious(previousLeaf.TimeStamp, previousLeaf.Duration);
+                    talk.TimeStamp = previousLeaf != null 
+                        ? _timeService.CalculateTimeStampFromPrevious(previousLeaf.TimeStamp, previousLeaf.Duration)
+                        : _timeService.CalculateStartingTimeStamp(startingTime);
 
-                    sessionTalks.Add(talk);
+                    sessionTalks.Add(talk); 
                     previousLeaf = talk;
                 }
 
             return sessionTalks;
+        }
+
+        public ConferenceComponent CalculateAfterSessionEvent
+            (IList<ConferenceComponent> sessionTalks, string name, int minStartEvent, SpecialLengthSettings specialLength)
+        {
+            var sessionEvent = new ConferenceLeaf(name, 0, specialLength);
+
+            ConferenceComponent lastTalk = null;
+
+            if (sessionTalks.Count > 0)
+                lastTalk = sessionTalks.Last();
+
+            sessionEvent.TimeStamp = lastTalk != null && 
+                                     lastTalk.TimeStamp.AddMinutes(lastTalk.Duration) >=
+                                     DateTime.Today.AddHours(minStartEvent)
+                ? _timeService.CalculateTimeStampFromPrevious(lastTalk.TimeStamp, lastTalk.Duration)
+                : _timeService.CalculateStartingTimeStamp(minStartEvent);
+
+            return sessionEvent;
         }
 
         public IList<ConferenceComponent> RemoveSelectedTalksFromInputTalks

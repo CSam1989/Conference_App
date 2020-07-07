@@ -41,10 +41,9 @@ namespace Application.Conference.Builder
             foreach (var sessionSettings in _sessions.SessionList)
             {
                 track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength, sessionSettings.StartSession));
-                var finishEvent = new ConferenceLeaf(sessionSettings.FinishingEvent, 0, _specialLength);
-                var lastTalk = _sessionTalks.Last();
-                finishEvent.TimeStamp =
-                    _timeService.CalculateTimeStampFromPrevious(lastTalk.TimeStamp, lastTalk.Duration);
+                var finishEvent = _trackService.CalculateAfterSessionEvent(
+                    _sessionTalks, sessionSettings.FinishingEvent, sessionSettings.MinStartEvent, _specialLength);
+                
                 track.Add(finishEvent);
             }
 
