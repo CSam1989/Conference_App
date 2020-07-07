@@ -29,7 +29,7 @@ namespace Application.Common.Factories
                     return new ManualInput(_specialLength, _inputValidation);
             }
 
-            return null;
+            throw new NotSupportedException($"{inputType} is not a supported input type.");
         }
     }
 }
