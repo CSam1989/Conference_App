@@ -10,10 +10,12 @@ namespace Application.Common.Factories
     public class InputFactory : IInputFactory
     {
         private readonly SpecialLengthSettings _specialLength;
+        private readonly IInputValidationService _inputValidation;
 
-        public InputFactory(SpecialLengthSettings specialLength)
+        public InputFactory(SpecialLengthSettings specialLength, IInputValidationService inputValidation)
         {
             _specialLength = specialLength;
+            _inputValidation = inputValidation;
         }
 
         //Violates OCP
@@ -22,9 +24,9 @@ namespace Application.Common.Factories
             switch (inputType.ToLower())
             {
                 case "file":
-                    return new FileInput(_specialLength);
+                    return new FileInput(_specialLength, _inputValidation);
                 case "manual":
-                    return new ManualInput(_specialLength);
+                    return new ManualInput(_specialLength, _inputValidation);
             }
 
             return null;
