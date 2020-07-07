@@ -11,10 +11,12 @@ namespace Application.Input
     public class ManualInput: IInputStrategy
     {
         private readonly SpecialLengthSettings _specialLength;
+        private readonly IInputValidationService _inputValidation;
 
-        public ManualInput(SpecialLengthSettings specialLength)
+        public ManualInput(SpecialLengthSettings specialLength, IInputValidationService inputValidation)
         {
             _specialLength = specialLength;
+            _inputValidation = inputValidation;
         }
 
         public IList<ConferenceComponent> Read()
@@ -45,7 +47,7 @@ namespace Application.Input
             {
                 Console.Write($"{question}: ");
                 output = Console.ReadLine();
-            } while (string.IsNullOrWhiteSpace(output) || output.Any(char.IsDigit));
+            } while (!_inputValidation.IsValidTalkTitle(output));
 
             return output;
         }
@@ -59,10 +61,7 @@ namespace Application.Input
             {
                 Console.Write($"{question}: ");
                 input = Console.ReadLine();
-
-                if (input != null && input.ToLower() == _specialLength.Name)
-                    return _specialLength.Length;
-            } while (!int.TryParse(input, out output) || output < 0);
+            } while (!_inputValidation.IsValidTalkDuration(input, out output));
 
             return output;
         }

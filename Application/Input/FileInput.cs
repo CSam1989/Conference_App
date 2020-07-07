@@ -12,10 +12,12 @@ namespace Application.Input
     public class FileInput : IInputStrategy
     {
         private readonly SpecialLengthSettings _specialLength;
+        private readonly IInputValidationService _inputValidation;
 
-        public FileInput(SpecialLengthSettings specialLength)
+        public FileInput(SpecialLengthSettings specialLength, IInputValidationService inputValidation)
         {
             _specialLength = specialLength;
+            _inputValidation = inputValidation;
         }
 
         public IList<ConferenceComponent> Read()
@@ -34,11 +36,13 @@ namespace Application.Input
                     var name = record.Substring(0, indexLastSpace);
                     var durationString = record.Substring(indexLastSpace + 1);
 
-                    var duration = durationString == _specialLength.Name 
-                        ? _specialLength.Length 
-                        : int.Parse(durationString.Substring(0, durationString.Length - 3));
-
-                    talks.Add(new ConferenceLeaf(name, duration, _specialLength));
+                    if(_inputValidation.IsValidTalkTitle(name) && 
+                       _inputValidation.IsValidTalkDuration(
+                           durationString == _specialLength.Name
+                            ? _specialLength.Name
+                            : durationString.Substring(0, durationString.Length - 3), 
+                           out int duration))
+                        talks.Add(new ConferenceLeaf(name, duration, _specialLength));
                 }
             }
 

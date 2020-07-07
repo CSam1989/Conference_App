@@ -37,6 +37,9 @@ namespace Presentation
         // Equivalent to Main in Program.cs
         public void Run()
         {
+            //Adds global exception handling
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+
             string inputStyle;
             do
             {
@@ -53,6 +56,14 @@ namespace Presentation
 
             Console.WriteLine(conference.Print());
             
+        }
+
+        private void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            Console.WriteLine("Press Enter to Exit");
+            Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }
