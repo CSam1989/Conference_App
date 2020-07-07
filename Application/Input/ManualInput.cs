@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
+using Application.Conference.Composite;
 
 namespace Application.Input
 {
@@ -16,9 +17,9 @@ namespace Application.Input
             _specialLength = specialLength;
         }
 
-        public IList<Talk> Read()
+        public IList<ConferenceComponent> Read()
         {
-            IList<Talk> talks = new List<Talk>();
+            IList<ConferenceComponent> talks = new List<ConferenceComponent>();
             string name;
             int duration;
 
@@ -28,11 +29,7 @@ namespace Application.Input
             {
                 duration = ReadDuration(
                     $"Length of talk in minutes? (\"{_specialLength.Name}\" = {_specialLength.Length}min)");
-                talks.Add(new Talk()
-                {
-                    Name = name,
-                    Duration = duration
-                });
+                talks.Add(new ConferenceLeaf(name, duration, _specialLength));
 
                 name = ReadName("Title of next talk? (\"S\" = Stop)");
             }

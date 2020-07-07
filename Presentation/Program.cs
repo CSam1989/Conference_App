@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Application.Common.Factories;
 using Application.Common.Interfaces;
+using Application.Common.Services;
 using Application.Common.Settings;
 using Application.Input;
 using Microsoft.Extensions.Configuration;
@@ -33,8 +35,20 @@ namespace Presentation
             var specialLength = config.GetSection("ApplicationConstants:SpecialTalkLength").Get<SpecialLengthSettings>();
             services.AddSingleton(specialLength);
 
+            var sessionSettings = config.GetSection("ApplicationConstants:Sessions").GetChildren();
+            var sessions = new Sessions();
+
+            foreach (var session in sessionSettings)
+            {
+                sessions.SessionList.Add(session.Get<SessionSettings>()); ;
+            }
+            
+            services.AddSingleton(sessions);
+
             //Add Services To IOC Container
             services.AddSingleton<IInputFactory, InputFactory>();
+            services.AddScoped<ITrackService, TrackService>();
+            services.AddScoped<ITimeService, TimeService>();
 
             services.AddTransient<App>();
 

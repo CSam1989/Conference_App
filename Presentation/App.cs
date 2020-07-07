@@ -5,6 +5,8 @@ using Application;
 using Application.Common.Factories;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
+using Application.Conference.Builder;
+using Application.Conference.Composite;
 using Application.Input;
 using Microsoft.Extensions.Configuration;
 
@@ -12,21 +14,29 @@ namespace Presentation
 {
     public class App
     {
-        private readonly IConfiguration _config;
+        private readonly ITrackService _trackService;
+        private readonly ITimeService _timeService;
         private readonly IInputFactory _inputFactory;
+        private readonly SpecialLengthSettings _specialLength;
+        private readonly Sessions _sessions;
 
         public App(
-            IConfiguration config,
-            IInputFactory inputFactory)
+            ITrackService trackService,
+            ITimeService timeService,
+            IInputFactory inputFactory,
+            SpecialLengthSettings specialLength,
+            Sessions sessions)
         {
-            _config = config;
+            _trackService = trackService;
+            _timeService = timeService;
             _inputFactory = inputFactory;
+            _specialLength = specialLength;
+            _sessions = sessions;
         }
 
         // Equivalent to Main in Program.cs
         public void Run()
         {
-
             string inputStyle;
             do
             {
@@ -38,17 +48,11 @@ namespace Presentation
 
             var allTalks = inputStrategy.Read();
 
-            var sessions = _config.GetSection("ApplicationConstants:Sessions").GetChildren();
+            var builder = new ConferenceBuilder(allTalks, _trackService,_timeService, _specialLength,_sessions);
+            var conference = builder.BuildConference();
 
-            foreach (var session in sessions)
-            {
-                var test = session.Get<SessionSettings>();
-
-                Console.WriteLine(test.Name);
-                Console.WriteLine(test.MaxLength);
-            }
-
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(conference.Print());
+            
         }
     }
 }
