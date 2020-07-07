@@ -16,12 +16,9 @@ namespace Application.Common.Settings
     public class SessionSettings
     {
         public string Name { get; set; }
-        public int MinLength { get; set; }
         public int MaxLength { get; set; }
         public int StartSession { get; set; }
         public string FinishingEvent { get; set; }
         public int MinStartEvent { get; set; }
-        public int MaxStartEvent { get; set; }
-        public int Duration { get; set; }
     }
 }

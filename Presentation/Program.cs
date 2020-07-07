@@ -49,6 +49,7 @@ namespace Presentation
             services.AddSingleton<IInputFactory, InputFactory>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<ITimeService, TimeService>();
+            services.AddScoped<IInputValidationService, InputValidationService>();
 
             services.AddTransient<App>();
 
