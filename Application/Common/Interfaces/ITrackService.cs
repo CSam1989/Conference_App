@@ -10,7 +10,7 @@ namespace Application.Common.Interfaces
             (IList<ConferenceComponent> allTalks, int maximumMinutes, int startingTime);
 
         ConferenceComponent CalculateAfterSessionEvent
-            (IList<ConferenceComponent> sessionTalks, string name, int minStartEvent, SpecialLengthSettings specialLength);
+            (IList<ConferenceComponent> sessionTalks, string name, int minStartEvent);
 
         IList<ConferenceComponent> RemoveSelectedTalksFromInputTalks
             (IList<ConferenceComponent> talks, IList<ConferenceComponent> talksToRemove);

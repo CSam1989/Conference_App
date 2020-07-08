@@ -10,15 +10,23 @@ namespace Application.Common.Services
     public class TrackService : ITrackService
     {
         private readonly ITimeService _timeService;
+        private readonly SpecialLengthSettings _specialLength;
 
-        public TrackService(ITimeService timeService)
+        public TrackService(ITimeService timeService, SpecialLengthSettings specialLength)
         {
             _timeService = timeService;
+            _specialLength = specialLength;
         }
 
         public IList<ConferenceComponent> CalculateTalksForSession
             (IList<ConferenceComponent> allTalks, int maximumMinutes, int startingTime)
         {
+            if(allTalks == null)
+                throw new ArgumentNullException();
+
+            if(maximumMinutes <= 0 || startingTime < 0)
+                throw new ArgumentOutOfRangeException();
+
             var totalLength = 0;
             var sessionTalks = new List<ConferenceComponent>();
             ConferenceComponent previousLeaf = null;
@@ -40,17 +48,16 @@ namespace Application.Common.Services
         }
 
         public ConferenceComponent CalculateAfterSessionEvent
-            (IList<ConferenceComponent> sessionTalks, string name, int minStartEvent, SpecialLengthSettings specialLength)
+            (IList<ConferenceComponent> sessionTalks, string name, int minStartEvent)
         {
-            var sessionEvent = new ConferenceLeaf(name, 0, specialLength);
+            if (sessionTalks.Count == 0)
+                return null;
 
-            ConferenceComponent lastTalk = null;
+            var sessionEvent = new ConferenceLeaf(name, 0, _specialLength);
 
-            if (sessionTalks.Count > 0)
-                lastTalk = sessionTalks.Last();
+            ConferenceComponent lastTalk = sessionTalks.Last();
 
-            sessionEvent.TimeStamp = lastTalk != null && 
-                                     lastTalk.TimeStamp.AddMinutes(lastTalk.Duration) >=
+            sessionEvent.TimeStamp = lastTalk.TimeStamp.AddMinutes(lastTalk.Duration) >=
                                      DateTime.Today.AddHours(minStartEvent)
                 ? _timeService.CalculateTimeStampFromPrevious(lastTalk.TimeStamp, lastTalk.Duration)
                 : _timeService.CalculateStartingTimeStamp(minStartEvent);
