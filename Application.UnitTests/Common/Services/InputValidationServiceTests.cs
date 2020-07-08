@@ -11,30 +11,14 @@ using Shouldly;
 namespace Application.UnitTests.Common.Services
 {
     [TestFixture]
-    public class InputValidationServiceTests
+    public class InputValidationServiceTests: TestBase
     {
         private IInputValidationService _inputValidation;
 
         [SetUp]
         public void Setup()
         {
-            var specialLengthSettings = new Mock<SpecialLengthSettings>();
-
-            specialLengthSettings
-                .Setup(s => s.Name)
-                .Returns("test");
-            specialLengthSettings
-                .Setup(s => s.Length)
-                .Returns(1);
-
-            var sessions = new Mock<Sessions>();
-            var sessionList = new List<SessionSettings> {new SessionSettings() {MaxLength = 60}};
-
-            sessions
-                .Setup(s => s.SessionList)
-                .Returns(sessionList);
-
-            _inputValidation = new InputValidationService(specialLengthSettings.Object, sessions.Object);
+            _inputValidation = new InputValidationService(SpecialLengthSettings.Object, Sessions.Object);
         }
 
         [TestCase("", false)]
