@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Application.Common.Factories;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
@@ -14,8 +12,6 @@ namespace Application.UnitTests.Common.Factories
     [TestFixture]
     public class InputFactoryTests
     {
-        private IInputFactory _inputFactory;
-
         [SetUp]
         public void Setup()
         {
@@ -24,6 +20,8 @@ namespace Application.UnitTests.Common.Factories
 
             _inputFactory = new InputFactory(specialLengthSettings.Object, inputValidation.Object);
         }
+
+        private IInputFactory _inputFactory;
 
         [Test]
         public void WhenFileInputTypeIsGiven_ReturnsCorrectObject()

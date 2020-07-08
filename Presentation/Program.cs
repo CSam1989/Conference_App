@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Application.Common.Factories;
 using Application.Common.Interfaces;
 using Application.Common.Services;
 using Application.Common.Settings;
-using Application.Input;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,7 +30,8 @@ namespace Presentation
             services.AddSingleton(config);
 
             //Add Settings to IOC Container
-            var specialLength = config.GetSection("ApplicationConstants:SpecialTalkLength").Get<SpecialLengthSettings>();
+            var specialLength = config.GetSection("ApplicationConstants:SpecialTalkLength")
+                .Get<SpecialLengthSettings>();
             services.AddSingleton(specialLength);
 
             var sessionSettings = config.GetSection("ApplicationConstants:Sessions").GetChildren();
@@ -40,9 +39,10 @@ namespace Presentation
 
             foreach (var session in sessionSettings)
             {
-                sessions.SessionList.Add(session.Get<SessionSettings>()); ;
+                sessions.SessionList.Add(session.Get<SessionSettings>());
+                ;
             }
-            
+
             services.AddSingleton(sessions);
 
             //Add Services To IOC Container

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Conference.Composite;
 
 namespace Application.Input
 {
-    public class ManualInput: IInputStrategy
+    public class ManualInput : IInputStrategy
     {
-        private readonly SpecialLengthSettings _specialLength;
         private readonly IInputValidationService _inputValidation;
+        private readonly SpecialLengthSettings _specialLength;
 
         public ManualInput(SpecialLengthSettings specialLength, IInputValidationService inputValidation)
         {

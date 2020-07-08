@@ -1,5 +1,4 @@
-﻿
-namespace Application.Common.Settings
+﻿namespace Application.Common.Settings
 {
     public class SpecialLengthSettings
     {

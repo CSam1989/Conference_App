@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Services;
 using Application.Common.Settings;
@@ -12,11 +11,8 @@ using Shouldly;
 namespace Application.UnitTests.Common.Services
 {
     [TestFixture]
-    public class TrackServiceTests: TestBase
+    public class TrackServiceTests : TestBase
     {
-        private ITrackService _trackService;
-        private SessionSettings _sessionSettings;
-
         [SetUp]
         public void Setup()
         {
@@ -26,30 +22,26 @@ namespace Application.UnitTests.Common.Services
             _sessionSettings = Sessions.Object.SessionList.First();
         }
 
+        private ITrackService _trackService;
+        private SessionSettings _sessionSettings;
+
         [Test]
-        public void CalculateTalksForSession_WhenGivenNormalValues_ReturnsNewListWithSessionTalks()
+        public void CalculateAfterSessionEvent_WhenGivenEmptyList_ReturnsNull()
         {
-            var result = _trackService.CalculateTalksForSession(
-                TestTalks, 
-                _sessionSettings.MaxLength,
-                _sessionSettings.StartSession);
+            var result = _trackService.CalculateAfterSessionEvent(new List<ConferenceComponent>(), "Test", 10);
 
-            result.ShouldBeOfType<List<ConferenceComponent>>();
-            result.Count.ShouldBe(3);
-
-            var component = result.FirstOrDefault();
-
-            component.ShouldBeOfType<ConferenceLeaf>();
-            component.TimeStamp.Hour.ShouldBe(_sessionSettings.StartSession);
+            result.ShouldBeNull();
         }
 
         [Test]
-        public void CalculateTalksForSession_WhenGivenNoList_ThrowsError()
+        public void
+            CalculateAfterSessionEvent_WhenGivenTotalDurationShorterThenMinStartEvent_ReturnsSessionEventWithMinStartEventAsStartingTime()
         {
-            Should.Throw<ArgumentNullException>(() => _trackService.CalculateTalksForSession(
-                null,
-                _sessionSettings.MaxLength,
-                _sessionSettings.StartSession));
+            var result = _trackService.CalculateAfterSessionEvent(TestTalks, "Test", 12);
+
+            result.ShouldBeOfType<ConferenceLeaf>();
+            result.Name.ShouldBe("Test");
+            result.TimeStamp.Hour.ShouldBe(12);
         }
 
         [Test]
@@ -71,21 +63,29 @@ namespace Application.UnitTests.Common.Services
         }
 
         [Test]
-        public void CalculateAfterSessionEvent_WhenGivenTotalDurationShorterThenMinStartEvent_ReturnsSessionEventWithMinStartEventAsStartingTime()
+        public void CalculateTalksForSession_WhenGivenNoList_ThrowsError()
         {
-            var result = _trackService.CalculateAfterSessionEvent(TestTalks, "Test", 12);
-
-            result.ShouldBeOfType<ConferenceLeaf>();
-            result.Name.ShouldBe("Test");
-            result.TimeStamp.Hour.ShouldBe(12);
+            Should.Throw<ArgumentNullException>(() => _trackService.CalculateTalksForSession(
+                null,
+                _sessionSettings.MaxLength,
+                _sessionSettings.StartSession));
         }
 
         [Test]
-        public void CalculateAfterSessionEvent_WhenGivenEmptyList_ReturnsNull()
+        public void CalculateTalksForSession_WhenGivenNormalValues_ReturnsNewListWithSessionTalks()
         {
-            var result = _trackService.CalculateAfterSessionEvent(new List<ConferenceComponent>(), "Test", 10);
+            var result = _trackService.CalculateTalksForSession(
+                TestTalks,
+                _sessionSettings.MaxLength,
+                _sessionSettings.StartSession);
 
-            result.ShouldBeNull();
+            result.ShouldBeOfType<List<ConferenceComponent>>();
+            result.Count.ShouldBe(3);
+
+            var component = result.FirstOrDefault();
+
+            component.ShouldBeOfType<ConferenceLeaf>();
+            component.TimeStamp.Hour.ShouldBe(_sessionSettings.StartSession);
         }
     }
 }

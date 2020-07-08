@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Conference.Composite;
@@ -9,23 +7,17 @@ namespace Application.Conference.Builder
 {
     public class ConferenceBuilder : CompositeBuilder
     {
-        private IList<ConferenceComponent> _sessionTalks;
         private readonly Sessions _sessions;
         private readonly ITrackService _trackService;
-        private readonly ITimeService _timeService;
-        private readonly SpecialLengthSettings _specialLength;
+        private IList<ConferenceComponent> _sessionTalks;
 
         public ConferenceBuilder(
-            IList<ConferenceComponent> allTalks, 
+            IList<ConferenceComponent> allTalks,
             ITrackService trackService,
-            ITimeService timeService,
-            SpecialLengthSettings specialLength, 
             Sessions sessions) :
             base(allTalks)
         {
             _trackService = trackService;
-            _timeService = timeService;
-            _specialLength = specialLength;
             _sessions = sessions;
         }
 
@@ -43,14 +35,15 @@ namespace Application.Conference.Builder
                 track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength, sessionSettings.StartSession));
                 var finishEvent = _trackService.CalculateAfterSessionEvent(
                     _sessionTalks, sessionSettings.FinishingEvent, sessionSettings.MinStartEvent);
-                
+
                 track.Add(finishEvent);
             }
 
             return track;
         }
 
-        private ConferenceComponent BuildSession(ref IList<ConferenceComponent> remainingTalks, int maxDuration, int startingTime)
+        private ConferenceComponent BuildSession(ref IList<ConferenceComponent> remainingTalks, int maxDuration,
+            int startingTime)
         {
             var session = CreateComposite(null, maxDuration);
 

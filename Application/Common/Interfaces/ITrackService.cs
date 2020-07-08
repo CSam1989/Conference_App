@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Application.Common.Settings;
 using Application.Conference.Composite;
 
 namespace Application.Common.Interfaces

@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Services;
-using Application.Common.Settings;
-using Moq;
 using NUnit.Framework;
 using Shouldly;
 
 namespace Application.UnitTests.Common.Services
 {
     [TestFixture]
-    public class InputValidationServiceTests: TestBase
+    public class InputValidationServiceTests : TestBase
     {
-        private IInputValidationService _inputValidation;
-
         [SetUp]
         public void Setup()
         {
             _inputValidation = new InputValidationService(SpecialLengthSettings.Object, Sessions.Object);
         }
+
+        private IInputValidationService _inputValidation;
 
         [TestCase("", false)]
         [TestCase(" ", false)]
@@ -42,7 +37,7 @@ namespace Application.UnitTests.Common.Services
         [TestCase("t", false)]
         public void GivenDuration_ShouldReturnExpectedResult(string duration, bool expectedResult)
         {
-            var result = _inputValidation.IsValidTalkDuration(duration, out int output);
+            var result = _inputValidation.IsValidTalkDuration(duration, out var output);
 
             result.ShouldBe(expectedResult);
         }

@@ -9,8 +9,8 @@ namespace Application.Common.Services
 {
     public class TrackService : ITrackService
     {
-        private readonly ITimeService _timeService;
         private readonly SpecialLengthSettings _specialLength;
+        private readonly ITimeService _timeService;
 
         public TrackService(ITimeService timeService, SpecialLengthSettings specialLength)
         {
@@ -21,10 +21,10 @@ namespace Application.Common.Services
         public IList<ConferenceComponent> CalculateTalksForSession
             (IList<ConferenceComponent> allTalks, int maximumMinutes, int startingTime)
         {
-            if(allTalks == null)
+            if (allTalks == null)
                 throw new ArgumentNullException();
 
-            if(maximumMinutes <= 0 || startingTime < 0)
+            if (maximumMinutes <= 0 || startingTime < 0)
                 throw new ArgumentOutOfRangeException();
 
             var totalLength = 0;
@@ -36,11 +36,11 @@ namespace Application.Common.Services
                 {
                     totalLength += talk.Duration;
 
-                    talk.TimeStamp = previousLeaf != null 
+                    talk.TimeStamp = previousLeaf != null
                         ? _timeService.CalculateTimeStampFromPrevious(previousLeaf.TimeStamp, previousLeaf.Duration)
                         : _timeService.CalculateStartingTimeStamp(startingTime);
 
-                    sessionTalks.Add(talk); 
+                    sessionTalks.Add(talk);
                     previousLeaf = talk;
                 }
 
@@ -55,7 +55,7 @@ namespace Application.Common.Services
 
             var sessionEvent = new ConferenceLeaf(name, 0, _specialLength);
 
-            ConferenceComponent lastTalk = sessionTalks.Last();
+            var lastTalk = sessionTalks.Last();
 
             sessionEvent.TimeStamp = lastTalk.TimeStamp.AddMinutes(lastTalk.Duration) >=
                                      DateTime.Today.AddHours(minStartEvent)
@@ -72,6 +72,5 @@ namespace Application.Common.Services
 
             return talks;
         }
-
     }
 }

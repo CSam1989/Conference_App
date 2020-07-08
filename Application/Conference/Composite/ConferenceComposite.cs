@@ -26,7 +26,7 @@ namespace Application.Conference.Composite
                 builder.Append($"\n{Name}\n"); //newline before & after name
 
             foreach (var component in ConferenceComponents)
-                    builder.Append(component?.Print());
+                builder.Append(component?.Print());
 
             return builder.ToString();
         }

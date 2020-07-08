@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 using Application.Input;
@@ -9,8 +7,8 @@ namespace Application.Common.Factories
 {
     public class InputFactory : IInputFactory
     {
-        private readonly SpecialLengthSettings _specialLength;
         private readonly IInputValidationService _inputValidation;
+        private readonly SpecialLengthSettings _specialLength;
 
         public InputFactory(SpecialLengthSettings specialLength, IInputValidationService inputValidation)
         {

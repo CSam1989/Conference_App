@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Application.Common.Settings;
 using Application.Conference.Composite;
 using Moq;
@@ -21,7 +19,7 @@ namespace Application.UnitTests
                 .Returns(1);
 
             Sessions = new Mock<Sessions>();
-            var sessionList = new List<SessionSettings> { new SessionSettings() { MaxLength = 60, StartSession = 9} };
+            var sessionList = new List<SessionSettings> {new SessionSettings {MaxLength = 60, StartSession = 9}};
 
             Sessions
                 .Setup(s => s.SessionList)

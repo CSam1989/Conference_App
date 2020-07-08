@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Application.Common.Interfaces;
 using Application.Common.Settings;
 
@@ -9,8 +7,8 @@ namespace Application.Common.Services
 {
     public class InputValidationService : IInputValidationService
     {
-        private readonly SpecialLengthSettings _specialLength;
         private readonly Sessions _sessions;
+        private readonly SpecialLengthSettings _specialLength;
 
         public InputValidationService(SpecialLengthSettings specialLength, Sessions sessions)
         {
@@ -35,7 +33,5 @@ namespace Application.Common.Services
 
             return int.TryParse(duration, out output) && output >= 0 && output <= highestMaxSessionDuration;
         }
-
-
     }
 }
