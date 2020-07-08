@@ -10,7 +10,7 @@ namespace Application.Common.Settings
             SessionList = new List<SessionSettings>();
         }
 
-        public IList<SessionSettings> SessionList { get; set; }
+        public virtual IList<SessionSettings> SessionList { get; set; }
     }
 
     public class SessionSettings

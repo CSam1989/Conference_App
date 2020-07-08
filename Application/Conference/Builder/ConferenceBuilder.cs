@@ -42,7 +42,7 @@ namespace Application.Conference.Builder
             {
                 track.Add(BuildSession(ref remainingTalks, sessionSettings.MaxLength, sessionSettings.StartSession));
                 var finishEvent = _trackService.CalculateAfterSessionEvent(
-                    _sessionTalks, sessionSettings.FinishingEvent, sessionSettings.MinStartEvent, _specialLength);
+                    _sessionTalks, sessionSettings.FinishingEvent, sessionSettings.MinStartEvent);
                 
                 track.Add(finishEvent);
             }

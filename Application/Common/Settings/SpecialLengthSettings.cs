@@ -3,7 +3,7 @@ namespace Application.Common.Settings
 {
     public class SpecialLengthSettings
     {
-        public string Name { get; set; }
-        public int Length { get; set; }
+        public virtual string Name { get; set; }
+        public virtual int Length { get; set; }
     }
 }
