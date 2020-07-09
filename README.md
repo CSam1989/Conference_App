@@ -22,12 +22,12 @@ Download the source code from this github repository. Once downloaded, open the 
 #### Calculating Conference Tracks
 * Once you are finished with the input, the application will calculate the tracks with the given input.
 * Here are some business rules:
- * The conference has multiple tracks each of which has a morning and afternoon session.
- * Each session contains multiple talks.
- * Morning sessions begin at 9am and must finish by 12 noon, for lunch.
- * Afternoon sessions begin at 1pm and must finish in time for the networking event.
- * The networking event can start no earlier than 4:00 and no later than 5:00.
- * Presenters will be very punctual; there needs to be no gap between sessions.
+  * The conference has multiple tracks each of which has a morning and afternoon session.
+  * Each session contains multiple talks.
+  * Morning sessions begin at 9am and must finish by 12 noon, for lunch.
+  * Afternoon sessions begin at 1pm and must finish in time for the networking event.
+  * The networking event can start no earlier than 4:00 and no later than 5:00.
+  * Presenters will be very punctual; there needs to be no gap between sessions.
 
 ## Authors
 
